@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>DESInformate</title>
+   <h1>DESI</h1>
+  <meta name="author" content="Matthew Rivera">
+  <meta name="description" content="DESI es una plataforma de noticias globales que con ayuda del usuario contribuye a la desinformacion y la verdad">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="styles.css">
+  <link href="styles.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
+  <style>
+  </style>
+  <meta charset="UTF-8">
+	<title>Facebook SDK para Javascript</title>
+
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="main.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="signupFrm">
+    <form action="" class="form">
+      <h2 class="title">Registrate a DESI e informese</h2>
+
+      <div class="inputContainer">
+        <input type="text" class="input" placeholder="a">
+        <label for="" class="label">Email</label>
+      </div>
+
+      <div class="inputContainer">
+        <input type="text" class="input" placeholder="a">
+        <label for="" class="label">Usuario</label>
+      </div>
+
+      <div class="inputContainer">
+        <input type="text" class="input" placeholder="a">
+        <label for="contraseña" class="label">contraseña</label>
+      </div>
+
+      <div class="inputContainer">
+        <input type="text" class="input" placeholder="a">
+        <label for="contraseña" class="label">Confirmar contraseña</label>
+      </div>
+      
+     
+      <input type="submit" class="submitBtn" value="Sign up">
+    </form>
+  </div>
+  <h1>FACEBOOK LOGIN</H1>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v14.0&appId=1469167076847753&autoLogAppEvents=1" nonce="BxO7yeAD"></script>
+    <div class="fb-login-button" data-width="" data-size="medium" data-button-type="continue_with" data-layout="default" data-auto-logout-link="true" data-use-continue-as="true"></div>
+    <script>
+    $(function() {
+
+var app_id = '1469167076847753';
+var scopes = 'email, user_friends, user_online_presence';
+
+var btn_login = '<a href="#" id="login" class="btn btn-primary">Iniciar sesión</a>';
+
+var div_session = "<div id='facebook-session'>"+
+          "<strong></strong>"+
+          "<img>"+
+          "<a href='#' id='logout' class='btn btn-danger'>Cerrar sesión</a>"+
+          "</div>";
+
+window.fbAsyncInit = function() {
+
+    FB.init({
+      appId      : 1469167076847753,
+      status     : true,
+      cookie     : true, 
+      xfbml      : true, 
+      version    : 'v14.0.'
+    });
+
+
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response, function() {});
+    });
+  };
+
+  var statusChangeCallback = function(response, callback) {
+    console.log(response);
+     
+    if (response.status === 'connected') {
+        getFacebookData();
+    } else {
+       callback(false);
+    }
+  }
+
+  var checkLoginState = function(callback) {
+    FB.getLoginStatus(function(response) {
+        callback(response);
+    });
+  }
+
+  var getFacebookData =  function() {
+    FB.api('/me', function(response) {
+      $('#login').after(div_session);
+      $('#login').remove();
+      $('#facebook-session strong').text("Bienvenido: "+response.name);
+      $('#facebook-session img').attr('src','http://graph.facebook.com/'+response.id+'/picture?type=large');
+    });
+  }
+
+  var facebookLogin = function() {
+    checkLoginState(function(data) {
+      if (data.status !== 'connected') {
+        FB.login(function(response) {
+          if (response.status === 'connected')
+            getFacebookData();
+        }, {scope: scopes});
+      }
+    })
+  }
+
+  var facebookLogout = function() {
+    checkLoginState(function(data) {
+      if (data.status === 'connected') {
+      FB.logout(function(response) {
+        $('#facebook-session').before(btn_login);
+        $('#facebook-session').remove();
+      })
+    }
+    })
+
+  }
+
+
+
+  $(document).on('click', '#login', function(e) {
+    e.preventDefault();
+
+    facebookLogin();
+  })
+
+  $(document).on('click', '#logout', function(e) {
+    e.preventDefault();
+
+    if (confirm("¿Está seguro?"))
+      facebookLogout();
+    else 
+      return false;
+  })
+
+})
+  </body>
+ 
+</html>
